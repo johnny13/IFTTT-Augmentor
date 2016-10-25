@@ -43,4 +43,8 @@ public class ApplicationProperties extends Properties {
 	public static Path getWorkTimesFile() {
 		return Paths.get(getInstance().getProperty("WORK_TIMES"));
 	}
+	
+	public static Path getGmailDirectory() {
+		return Paths.get(getInstance().getProperty("GMAIL_DIR"));
+	}
 }

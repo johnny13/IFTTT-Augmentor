@@ -11,7 +11,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import org.jboss.logging.Logger;
-import org.wurtele.ifttt.watchers.WorkTimesWatcher;
+import org.wurtele.ifttt.watchers.TrainingScheduleWatcher;
 import org.wurtele.ifttt.watchers.base.SimpleDirectoryWatcher;
 
 /**
@@ -33,15 +33,22 @@ public class ResourceManager {
 				propsWatcher.watch();
 				watchers.add(propsWatcher);
 			} catch (Exception e) {
-				logger.error("Failed to create properties file watcher");
+				logger.error("Failed to create properties file watcher", e);
 			}
 		}
+//		try {
+//			WorkTimesWatcher wtWatcher = new WorkTimesWatcher(ApplicationProperties.getWorkTimesFile());
+//			wtWatcher.watch();
+//			watchers.add(wtWatcher);
+//		} catch (Exception e) {
+//			logger.error("Failed to create work times files watcher", e);
+//		}
 		try {
-			WorkTimesWatcher wtWatcher = new WorkTimesWatcher(ApplicationProperties.getWorkTimesFile());
-			wtWatcher.watch();
-			watchers.add(wtWatcher);
+			TrainingScheduleWatcher tsWatcher = new TrainingScheduleWatcher(ApplicationProperties.getGmailDirectory());
+			tsWatcher.watch();
+			watchers.add(tsWatcher);
 		} catch (Exception e) {
-			logger.error("Failed to create work times files watcher");
+			logger.error("Failed to create training schedule watcher", e);
 		}
 	}
 	
