@@ -16,6 +16,7 @@
  */
 package org.wurtele.ifttt.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -23,7 +24,7 @@ import java.util.Objects;
  *
  * @author Douglas Wurtele
  */
-public class TrainingScheduleEntry implements Comparable<TrainingScheduleEntry> {
+public class TrainingScheduleEntry implements Serializable, Comparable<TrainingScheduleEntry> {
 	private Date start;
 	private Date end;
 	private String group;

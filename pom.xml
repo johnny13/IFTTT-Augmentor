@@ -44,9 +44,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160212</version>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.10</version>
             <type>jar</type>
         </dependency>
         <dependency>

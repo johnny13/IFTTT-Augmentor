@@ -23,12 +23,12 @@
                                         <rect key="frame" x="0.0" y="120" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pc2-zA-iGv" id="5SR-ci-tUD">
-                                            <frame key="frameInset" width="342" height="43"/>
+                                            <frame key="frameInset" width="342" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="GmQ-zc-IaT">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" translatesAutoresizingMaskIntoConstraints="NO" id="GmQ-zc-IaT">
                                                     <constraints>
-                                                        <constraint firstAttribute="width" secondItem="GmQ-zc-IaT" secondAttribute="height" multiplier="1:1" id="aQA-Mh-Enn"/>
+                                                        <constraint firstAttribute="width" secondItem="GmQ-zc-IaT" secondAttribute="height" multiplier="1:1" id="tGh-tQ-0Hh"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Training Schedules" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iXD-xH-IuX">
@@ -38,12 +38,11 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="leadingMargin" secondItem="GmQ-zc-IaT" secondAttribute="leading" id="0lQ-Zd-xdt"/>
-                                                <constraint firstItem="iXD-xH-IuX" firstAttribute="leading" secondItem="GmQ-zc-IaT" secondAttribute="trailing" constant="8" id="5fR-Km-Two"/>
-                                                <constraint firstItem="iXD-xH-IuX" firstAttribute="centerY" secondItem="5SR-ci-tUD" secondAttribute="centerY" id="94E-5x-rph"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="GmQ-zc-IaT" secondAttribute="bottom" constant="-6" id="9mO-ab-vmA"/>
-                                                <constraint firstItem="GmQ-zc-IaT" firstAttribute="centerY" secondItem="5SR-ci-tUD" secondAttribute="centerY" id="ApX-tI-Onk"/>
-                                                <constraint firstItem="GmQ-zc-IaT" firstAttribute="top" secondItem="5SR-ci-tUD" secondAttribute="topMargin" constant="-7" id="ywe-bw-JrN"/>
+                                                <constraint firstItem="iXD-xH-IuX" firstAttribute="leading" secondItem="GmQ-zc-IaT" secondAttribute="trailing" constant="8" id="9h8-t2-yzH"/>
+                                                <constraint firstItem="GmQ-zc-IaT" firstAttribute="top" secondItem="5SR-ci-tUD" secondAttribute="topMargin" constant="-6" id="Ezi-4b-arZ"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="GmQ-zc-IaT" secondAttribute="leading" id="Jai-7f-x8H"/>
+                                                <constraint firstItem="iXD-xH-IuX" firstAttribute="centerY" secondItem="5SR-ci-tUD" secondAttribute="centerY" id="PPL-Ny-cb4"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="GmQ-zc-IaT" secondAttribute="bottom" constant="-6" id="cch-8e-Zbc"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -69,19 +68,38 @@
         <!--Training Schedules-->
         <scene sceneID="Kyf-69-PpI">
             <objects>
-                <tableViewController id="BLH-3k-6qh" sceneMemberID="viewController">
+                <tableViewController id="BLH-3k-6qh" customClass="TrainingSchedulesViewController" customModule="IFTTT_Augmentor" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="jtK-B4-0vE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TrainingScheduleCell" id="EZs-Pc-M6N">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="TrainingScheduleCell" textLabel="cQQ-8y-zZR" detailTextLabel="fhk-ym-Ncw" style="IBUITableViewCellStyleSubtitle" id="Ppt-jo-hXI">
                                 <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EZs-Pc-M6N" id="bQf-pJ-bRA">
-                                    <frame key="frameInset" width="375" height="43"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ppt-jo-hXI" id="aEG-6h-ghc">
+                                    <frame key="frameInset" width="336" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cQQ-8y-zZR">
+                                            <frame key="frameInset" minX="15" minY="4" width="34" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fhk-ym-Ncw">
+                                            <frame key="frameInset" minX="15" minY="25" width="44" height="15"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="wsn-q4-gby" kind="show" id="XcZ-a9-e0w"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -96,6 +114,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RMq-67-cvF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1580" y="6"/>
+        </scene>
+        <!--Start Date - End Date-->
+        <scene sceneID="3rG-hQ-9cQ">
+            <objects>
+                <tableViewController id="wsn-q4-gby" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="sGu-e3-tgu">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="wsn-q4-gby" id="hq3-Wb-Ghh"/>
+                            <outlet property="delegate" destination="wsn-q4-gby" id="e3n-Iu-H2X"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Start Date - End Date" id="sVO-Jb-KaE">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="R7r-Go-9M0"/>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oth-Jr-kYy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2618" y="6"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="iBw-dp-Vbk">
@@ -115,6 +154,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="calendar-icon.png" width="128" height="128"/>
+        <image name="calendar" width="128" height="128"/>
     </resources>
 </document>

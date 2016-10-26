@@ -88,6 +88,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	        }
 	    }
 	}
+	
+	var context: NSManagedObjectContext {
+		get {
+			return persistentContainer.viewContext
+		}
+	}
 
 }
 

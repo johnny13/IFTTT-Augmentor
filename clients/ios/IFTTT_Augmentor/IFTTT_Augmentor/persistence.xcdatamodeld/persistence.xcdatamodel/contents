@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1108" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="TrainingSchedule" representedClassName="TrainingSchedule" syncable="YES" codeGenerationType="class">
+        <attribute name="end" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="file" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="imported" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="start" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TrainingScheduleItem" inverseName="schedule" inverseEntity="TrainingScheduleItem" syncable="YES"/>
+    </entity>
+    <entity name="TrainingScheduleItem" representedClassName="TrainingScheduleItem" syncable="YES" codeGenerationType="class">
+        <attribute name="end" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="file" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="group" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="instructor" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="start" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uniform" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrainingSchedule" inverseName="items" inverseEntity="TrainingSchedule" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="TrainingSchedule" positionX="-36" positionY="0" width="128" height="118"/>
+        <element name="TrainingScheduleItem" positionX="135" positionY="-45" width="128" height="193"/>
+    </elements>
 </model>
