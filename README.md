@@ -1,3 +1,4 @@
 # IFTTT-Augmentor
 
-Work Times - Creates a formatted Excel spreadsheet based on input from a delimited text file from IFTTT that report arrival and departure times from work.
+# Army
+Training Schedules - checks if gmail attachments saved by an IFTTT recipe are army training schedules and sends the data to an iPhone to be imported into a calendar.
