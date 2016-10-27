@@ -19,8 +19,13 @@
         <attribute name="uniform" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="schedule" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrainingSchedule" inverseName="items" inverseEntity="TrainingSchedule" syncable="YES"/>
     </entity>
+    <entity name="UserOption" representedClassName="UserOption" syncable="YES" codeGenerationType="class">
+        <attribute name="key" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="value" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
         <element name="TrainingSchedule" positionX="-36" positionY="0" width="128" height="118"/>
         <element name="TrainingScheduleItem" positionX="135" positionY="-45" width="128" height="193"/>
+        <element name="UserOption" positionX="54" positionY="36" width="128" height="75"/>
     </elements>
 </model>

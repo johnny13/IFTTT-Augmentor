@@ -74,7 +74,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 	@Override
 	public void handleDelete(Path path) {
 		try {
-			if (Files.exists(processedPath(path))) {
+			if (Files.exists(processedPath(path)) && !path.equals(processedPath(path))) {
 				Files.delete(processedPath(path));
 				TRAINING_SCHEDULES.remove(processedPath(path));
 			}

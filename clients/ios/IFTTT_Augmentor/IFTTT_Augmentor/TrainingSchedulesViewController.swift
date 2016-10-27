@@ -33,7 +33,7 @@ class TrainingSchedulesViewController: UITableViewController {
 						fetchRequest.predicate = NSPredicate(format: "file = %@", id)
 						do {
 							let results = try context.fetch(fetchRequest)
-							if (results.count > 0) {
+							if results.count > 0 {
 								self.schedules.append(results[0])
 								continue
 							}
@@ -51,7 +51,7 @@ class TrainingSchedulesViewController: UITableViewController {
 					do {
 						try context.save()
 					} catch {
-						print("Failed to save context: %@", error)
+						print("Failed to save context: \(error)")
 					}
 					DispatchQueue.main.async {
 						self.tableView.reloadData()
