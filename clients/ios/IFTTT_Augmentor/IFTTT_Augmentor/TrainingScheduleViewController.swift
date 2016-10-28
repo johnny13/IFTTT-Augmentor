@@ -13,6 +13,7 @@ import EventKit
 class TrainingScheduleViewController: UITableViewController {
 	var schedule: TrainingSchedule!
 	private var items: Array<TrainingScheduleItem> = []
+	private var selectedCell: IndexPath?
 	
 	@IBOutlet weak var addButton: UIBarButtonItem!
 
@@ -52,14 +53,38 @@ class TrainingScheduleViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.items.count
     }
+	
+	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		return tableView.indexPathForSelectedRow == indexPath ? 205.0 : 44.0
+	}
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath)
-		let item = self.items[indexPath.row]
-		cell.textLabel?.text = item.title
-		cell.detailTextLabel?.text = item.dateRange
-        return cell
+		if selectedCell != nil && selectedCell! == indexPath {
+			let cell = tableView.dequeueReusableCell(withIdentifier: "EventCellDetail", for: indexPath) as! TrainingScheduleItemDetailCell
+			cell.item = self.items[indexPath.row]
+			return cell
+		} else {
+			let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell", for: indexPath)
+			let item = self.items[indexPath.row]
+			cell.textLabel?.text = item.title
+			cell.detailTextLabel?.text = item.dateRange
+			return cell
+		}
     }
+	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if selectedCell != nil && selectedCell! == indexPath {
+			tableView.deselectRow(at: indexPath, animated: true)
+			selectedCell = nil
+			tableView.reloadRows(at: [indexPath], with: .automatic)
+		} else {
+			selectedCell = indexPath
+			tableView.reloadRows(at: [indexPath], with: .automatic)
+			tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+		}
+		tableView.beginUpdates()
+		tableView.endUpdates()
+	}
 
 	@IBAction func addToCalendar(_ sender: UIBarButtonItem) {
 		if let army = EventManager.armyCalendar {

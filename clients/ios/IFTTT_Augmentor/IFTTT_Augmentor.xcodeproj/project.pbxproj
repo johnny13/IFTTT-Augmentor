@@ -12,6 +12,7 @@
 		9160F3221DC3BD74006EDBB4 /* TrainingScheduleItem+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F3211DC3BD74006EDBB4 /* TrainingScheduleItem+Properties.swift */; };
 		91ABA6F31DC29B9800939BAA /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ABA6F21DC29B9800939BAA /* EventManager.swift */; };
 		91ABA6F51DC2A31C00939BAA /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91ABA6F41DC2A31C00939BAA /* MainMenuViewController.swift */; };
+		91DB95A71DC3F0D000D35DED /* TrainingScheduleItemDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DB95A61DC3F0D000D35DED /* TrainingScheduleItemDetailCell.swift */; };
 		91E0A4A41DC0E38400D217A9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91E0A4A31DC0E38400D217A9 /* AppDelegate.swift */; };
 		91E0A4A91DC0E38500D217A9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91E0A4A71DC0E38500D217A9 /* Main.storyboard */; };
 		91E0A4AC1DC0E38500D217A9 /* persistence.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 91E0A4AA1DC0E38500D217A9 /* persistence.xcdatamodeld */; };
@@ -26,6 +27,7 @@
 		9160F3211DC3BD74006EDBB4 /* TrainingScheduleItem+Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrainingScheduleItem+Properties.swift"; sourceTree = "<group>"; };
 		91ABA6F21DC29B9800939BAA /* EventManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		91ABA6F41DC2A31C00939BAA /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
+		91DB95A61DC3F0D000D35DED /* TrainingScheduleItemDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainingScheduleItemDetailCell.swift; sourceTree = "<group>"; };
 		91E0A4A01DC0E38400D217A9 /* IFTTT_Augmentor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IFTTT_Augmentor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91E0A4A31DC0E38400D217A9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		91E0A4A81DC0E38500D217A9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -83,6 +85,22 @@
 			name = Resources;
 			sourceTree = "<group>";
 		};
+		91DB95A81DC3F0D400D35DED /* UI Elements */ = {
+			isa = PBXGroup;
+			children = (
+				91DB95A91DC3F0DB00D35DED /* UITableViewCell */,
+			);
+			name = "UI Elements";
+			sourceTree = "<group>";
+		};
+		91DB95A91DC3F0DB00D35DED /* UITableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				91DB95A61DC3F0D000D35DED /* TrainingScheduleItemDetailCell.swift */,
+			);
+			name = UITableViewCell;
+			sourceTree = "<group>";
+		};
 		91E0A4971DC0E38200D217A9 = {
 			isa = PBXGroup;
 			children = (
@@ -104,6 +122,7 @@
 			children = (
 				91E0A4A31DC0E38400D217A9 /* AppDelegate.swift */,
 				91E0A4BE1DC0F5B600D217A9 /* View Controllers */,
+				91DB95A81DC3F0D400D35DED /* UI Elements */,
 				9160F31D1DC3B2BD006EDBB4 /* Core Data */,
 				9160F31F1DC3B2D7006EDBB4 /* Utils */,
 				9160F31E1DC3B2C7006EDBB4 /* Storyboards */,
@@ -200,6 +219,7 @@
 				9160F31A1DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift in Sources */,
 				91ABA6F51DC2A31C00939BAA /* MainMenuViewController.swift in Sources */,
 				91E0A4AC1DC0E38500D217A9 /* persistence.xcdatamodeld in Sources */,
+				91DB95A71DC3F0D000D35DED /* TrainingScheduleItemDetailCell.swift in Sources */,
 				9160F31C1DC3B0D0006EDBB4 /* TrainingSchedule+Properties.swift in Sources */,
 				91ABA6F31DC29B9800939BAA /* EventManager.swift in Sources */,
 				91E0A4BD1DC0F5A700D217A9 /* TrainingSchedulesViewController.swift in Sources */,
