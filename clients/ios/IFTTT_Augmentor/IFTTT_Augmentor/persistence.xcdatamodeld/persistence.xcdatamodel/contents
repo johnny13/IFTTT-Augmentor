@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1108" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11542" systemVersion="15G1108" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="TrainingSchedule" representedClassName="TrainingSchedule" syncable="YES" codeGenerationType="class">
         <attribute name="end" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="file" attributeType="String" indexed="YES" syncable="YES"/>
@@ -9,7 +9,6 @@
     </entity>
     <entity name="TrainingScheduleItem" representedClassName="TrainingScheduleItem" syncable="YES" codeGenerationType="class">
         <attribute name="end" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
-        <attribute name="file" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="group" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instructor" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
@@ -25,7 +24,7 @@
     </entity>
     <elements>
         <element name="TrainingSchedule" positionX="-36" positionY="0" width="128" height="118"/>
-        <element name="TrainingScheduleItem" positionX="135" positionY="-45" width="128" height="193"/>
+        <element name="TrainingScheduleItem" positionX="135" positionY="-45" width="128" height="180"/>
         <element name="UserOption" positionX="54" positionY="36" width="128" height="75"/>
     </elements>
 </model>
