@@ -24,7 +24,11 @@ extension TrainingScheduleItem {
 	
 	var calendarNotes: String? {
 		get {
-			return "\(self.notes)\n\nGroup: \(self.group)\nUniform: \(self.uniform)\nInstructor: \(self.instructor)"
+			let n = self.notes != nil ? self.notes! : " "
+			let g = self.group != nil ? self.group! : " "
+			let u = self.uniform != nil ? self.uniform! : " "
+			let i = self.instructor != nil ? self.instructor! : " "
+			return "NOTES: \(n)\n\nUniform: \(u)\nGroup: \(g)\nInstructor: \(i)"
 		}
 	}
 }
