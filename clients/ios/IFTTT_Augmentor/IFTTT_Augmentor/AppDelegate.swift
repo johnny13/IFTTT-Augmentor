@@ -8,15 +8,27 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
 	var window: UIWindow?
 
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-		// Override point for customization after application launch.
+		let notifications = UNUserNotificationCenter.current()
+		let actions = [UNNotificationAction(identifier: "scheduleImport", title: "Import", options: []), UNNotificationAction(identifier: "scheduleView", title: "View", options: .foreground)]
+		let category = UNNotificationCategory(identifier: "scheduleCategory", actions: actions, intentIdentifiers: [], options: [])
+		notifications.setNotificationCategories([category])
+		notifications.delegate = self
+		notifications.requestAuthorization(options: [.badge, .alert, .sound], completionHandler: { granted, error in
+			if let error = error {
+				print("Failed to register for notifications: \(error)")
+			}
+		})
+		application.registerForRemoteNotifications()
+		
 		return true
 	}
 
@@ -94,6 +106,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			return persistentContainer.viewContext
 		}
 	}
-
+	
+	// MARK: - Remote notifications
+	
+	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+		let token = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
+		print("Registered for remote notifications: \(token)")
+	}
+	
+	func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+		print("Failed to register for remote notifications: \(error)")
+	}
+	
+	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+		if response.actionIdentifier == "scheduleImport" {
+			print("Import button pressed")
+		} else if response.actionIdentifier == "scheduleView" {
+			print("View button pressed")
+		} else {
+			print("Notification received while app was in the background")
+		}
+	}
+	
+	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+		print("Notification received while app is in the foreground")
+	}
 }
 

@@ -22,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		910F07241DC791E600B6390D /* IFTTT_Augmentor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IFTTT_Augmentor.entitlements; sourceTree = "<group>"; };
 		9160F3191DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainingScheduleViewController.swift; sourceTree = "<group>"; };
 		9160F31B1DC3B0D0006EDBB4 /* TrainingSchedule+Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrainingSchedule+Properties.swift"; sourceTree = "<group>"; };
 		9160F3211DC3BD74006EDBB4 /* TrainingScheduleItem+Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrainingScheduleItem+Properties.swift"; sourceTree = "<group>"; };
@@ -39,6 +40,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		910F078B1DC7C94C00B6390D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		91E0A49D1DC0E38200D217A9 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -79,6 +87,7 @@
 		9160F3201DC3B2E2006EDBB4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				910F07241DC791E600B6390D /* IFTTT_Augmentor.entitlements */,
 				91E0A4AD1DC0E38500D217A9 /* Assets.xcassets */,
 				91E0A4B21DC0E38500D217A9 /* Info.plist */,
 			);
@@ -167,14 +176,27 @@
 		91E0A4981DC0E38200D217A9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0800;
+				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Douglas Wurtele";
 				TargetAttributes = {
+					910F078D1DC7C94C00B6390D = {
+						CreatedOnToolsVersion = 8.1;
+						DevelopmentTeam = 6HB6MC3M3M;
+						ProvisioningStyle = Automatic;
+					};
 					91E0A49F1DC0E38200D217A9 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 6HB6MC3M3M;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -197,6 +219,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		910F078C1DC7C94C00B6390D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		91E0A49E1DC0E38200D217A9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -210,6 +239,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		910F078A1DC7C94C00B6390D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		91E0A49C1DC0E38200D217A9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -345,6 +381,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = IFTTT_Augmentor/IFTTT_Augmentor.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6HB6MC3M3M;
 				INFOPLIST_FILE = IFTTT_Augmentor/Info.plist;
@@ -359,6 +396,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = IFTTT_Augmentor/IFTTT_Augmentor.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 6HB6MC3M3M;
 				INFOPLIST_FILE = IFTTT_Augmentor/Info.plist;

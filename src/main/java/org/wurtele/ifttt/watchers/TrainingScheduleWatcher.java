@@ -16,6 +16,8 @@
  */
 package org.wurtele.ifttt.watchers;
 
+import com.notnoop.apns.APNS;
+import com.notnoop.apns.ApnsService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -29,15 +31,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.wurtele.ifttt.model.TrainingScheduleEntry;
+import org.wurtele.ifttt.push.PushDevices;
 import org.wurtele.ifttt.watchers.base.SimpleDirectoryWatcher;
 
 /**
@@ -162,11 +169,32 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 				entries.add(entry);
 			}
 			
-			try (OutputStream os = Files.newOutputStream(processedPath(path));
-					ObjectOutputStream oos = new ObjectOutputStream(os)) {
-				oos.writeObject(entries);
+			if (!entries.isEmpty()) {
+				Collections.sort(entries);
+
+				try (OutputStream os = Files.newOutputStream(processedPath(path));
+						ObjectOutputStream oos = new ObjectOutputStream(os)) {
+					oos.writeObject(entries);
+				}
+				logger.info("Processed " + path);
+				ApnsService push = APNS.newService()
+						.withCert(Thread.currentThread().getContextClassLoader().getResourceAsStream("IFTTT.p12"), "ifTTT")
+						.withSandboxDestination()
+						.build();
+				Date start = DateUtils.truncate(entries.get(0).getStart(), Calendar.DATE);
+				Date end = DateUtils.truncate(entries.get(entries.size() - 1), Calendar.DATE);
+				DateFormat df = new SimpleDateFormat("MMM d, yyyy");
+				String payload = APNS.newPayload()
+						.category("scheduleImport")
+						.alertTitle("Training Schedule Received")
+						.alertBody(entries.size() + " events found for " + (start.before(end) ? df.format(start) + " - " + df.format(end) : df.format(start)))
+						.sound("default")
+						.customField("schedule", path.getParent().getFileName().toString() + "/" + FilenameUtils.getBaseName(path.getFileName().toString()))
+						.build();
+				PushDevices.getDevices().stream().forEach((device) -> {
+					push.push(device, payload);
+				});
 			}
-			logger.info("Processed " + path);
 		} catch (Exception e) {
 			logger.error("Failed to process training schedule file: " + path, e);
 			FAILED.add(path);
