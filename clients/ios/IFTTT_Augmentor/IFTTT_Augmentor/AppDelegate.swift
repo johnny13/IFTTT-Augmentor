@@ -119,12 +119,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	}
 	
 	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-		if response.actionIdentifier == "scheduleImport" {
-			print("Import button pressed")
-		} else if response.actionIdentifier == "scheduleView" {
-			print("View button pressed")
-		} else {
-			print("Notification received while app was in the background")
+		if response.notification.request.content.categoryIdentifier == "scheduleCategory" {
+			if let schedule = response.notification.request.content.userInfo["schedule"] as? String {
+				switch response.actionIdentifier {
+				case "scheduleImport":
+					print("Importing \(schedule)")
+				case "scheduleView":
+					print("Viewing \(schedule)")
+				default:
+					print("Viewing \(schedule) as the default action")
+				}
+			}
 		}
 	}
 	
