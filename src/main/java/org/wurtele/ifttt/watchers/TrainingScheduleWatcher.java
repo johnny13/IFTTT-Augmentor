@@ -185,7 +185,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 				Date end = DateUtils.truncate(entries.get(entries.size() - 1), Calendar.DATE);
 				DateFormat df = new SimpleDateFormat("MMM d, yyyy");
 				String payload = APNS.newPayload()
-						.category("scheduleImport")
+						.category("scheduleCategory")
 						.alertTitle("Training Schedule Received")
 						.alertBody(entries.size() + " events found for " + (start.before(end) ? df.format(start) + " - " + df.format(end) : df.format(start)))
 						.sound("default")
