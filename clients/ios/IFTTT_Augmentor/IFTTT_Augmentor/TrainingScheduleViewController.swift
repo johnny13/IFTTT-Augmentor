@@ -77,10 +77,16 @@ class TrainingScheduleViewController: UITableViewController {
 			tableView.deselectRow(at: indexPath, animated: true)
 			selectedCell = nil
 			tableView.reloadRows(at: [indexPath], with: .automatic)
+		} else if selectedCell != nil && selectedCell! != indexPath {
+			let deselected = IndexPath(row: selectedCell!.row, section: selectedCell!.section)
+			selectedCell = indexPath
+			tableView.deselectRow(at: deselected, animated: true)
+			tableView.reloadRows(at: [deselected, indexPath], with: .automatic)
+			tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
 		} else {
 			selectedCell = indexPath
 			tableView.reloadRows(at: [indexPath], with: .automatic)
-			tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+			tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
 		}
 		tableView.beginUpdates()
 		tableView.endUpdates()
