@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7136C31B1DC9818C001BEBDB /* ServerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7136C31A1DC9818C001BEBDB /* ServerManager.swift */; };
+		7136C31D1DC98B28001BEBDB /* RootNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7136C31C1DC98B28001BEBDB /* RootNavigationViewController.swift */; };
 		71910D4B1DC84607002F0C23 /* TrainingScheduleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71910D4A1DC84606002F0C23 /* TrainingScheduleManager.swift */; };
 		9160F31A1DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F3191DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift */; };
 		9160F31C1DC3B0D0006EDBB4 /* TrainingSchedule+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9160F31B1DC3B0D0006EDBB4 /* TrainingSchedule+Properties.swift */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7136C31A1DC9818C001BEBDB /* ServerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerManager.swift; sourceTree = "<group>"; };
+		7136C31C1DC98B28001BEBDB /* RootNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RootNavigationViewController.swift; sourceTree = "<group>"; };
 		71910D4A1DC84606002F0C23 /* TrainingScheduleManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainingScheduleManager.swift; sourceTree = "<group>"; };
 		910F07241DC791E600B6390D /* IFTTT_Augmentor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = IFTTT_Augmentor.entitlements; sourceTree = "<group>"; };
 		9160F3191DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainingScheduleViewController.swift; sourceTree = "<group>"; };
@@ -76,6 +80,7 @@
 			children = (
 				91ABA6F21DC29B9800939BAA /* EventManager.swift */,
 				71910D4A1DC84606002F0C23 /* TrainingScheduleManager.swift */,
+				7136C31A1DC9818C001BEBDB /* ServerManager.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -139,6 +144,7 @@
 		91E0A4BE1DC0F5B600D217A9 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7136C31C1DC98B28001BEBDB /* RootNavigationViewController.swift */,
 				91ABA6F41DC2A31C00939BAA /* MainMenuViewController.swift */,
 				91E0A4BC1DC0F5A700D217A9 /* TrainingSchedulesViewController.swift */,
 				9160F3191DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift */,
@@ -227,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7136C31D1DC98B28001BEBDB /* RootNavigationViewController.swift in Sources */,
 				9160F3221DC3BD74006EDBB4 /* TrainingScheduleItem+Properties.swift in Sources */,
 				91E0A4A41DC0E38400D217A9 /* AppDelegate.swift in Sources */,
 				9160F31A1DC3AF1E006EDBB4 /* TrainingScheduleViewController.swift in Sources */,
@@ -237,6 +244,7 @@
 				91ABA6F31DC29B9800939BAA /* EventManager.swift in Sources */,
 				71910D4B1DC84607002F0C23 /* TrainingScheduleManager.swift in Sources */,
 				91E0A4BD1DC0F5A700D217A9 /* TrainingSchedulesViewController.swift in Sources */,
+				7136C31B1DC9818C001BEBDB /* ServerManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

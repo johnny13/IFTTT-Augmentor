@@ -120,15 +120,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	
 	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 		if response.notification.request.content.categoryIdentifier == "scheduleCategory" {
-			if let schedule = response.notification.request.content.userInfo["schedule"] as? String {
-				switch response.actionIdentifier {
-				case "scheduleImport":
-					print("Importing \(schedule)")
-				case "scheduleView":
-					print("Viewing \(schedule)")
-				default:
-					print("Viewing \(schedule) as the default action")
+			if let nav = self.window?.rootViewController as? RootNavigationViewController {
+				if let main = nav.viewControllers[0] as? MainMenuViewController {
+					main.showLoadingView()
+					if let sched = response.notification.request.content.userInfo["schedule"] as? String {
+						TrainingScheduleManager.loadTrainingSchedules(completion: { schedules in
+							var schedule: TrainingSchedule?
+							for sch in schedules {
+								if sch.file == sched {
+									schedule = sch
+									break
+								}
+							}
+							if let schedule = schedule {
+								switch response.actionIdentifier {
+								case "scheduleImport":
+									main.hideLoadingView()
+									TrainingScheduleManager.importSchedule(schedule: schedule, completion: {
+										//TODO: send local notification to inform user of successful import
+										completionHandler()
+									})
+								case "scheduleView":
+									self.viewSchedule(schedule: schedule)
+									completionHandler()
+								default:
+									self.viewSchedule(schedule: schedule)
+									completionHandler()
+								}
+							}
+						})
+					}
 				}
+			}
+		} else {
+			completionHandler()
+		}
+	}
+	
+	private func viewSchedule(schedule: TrainingSchedule) {
+		if let nav = self.window?.rootViewController as? RootNavigationViewController {
+			nav.popToRootViewController(animated: true)
+			if let main = nav.viewControllers[0] as? MainMenuViewController {
+				main.viewTrainingSchedule(schedule)
 			}
 		}
 	}

@@ -20,6 +20,8 @@ class TrainingScheduleViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
+		print("Loading detail")
+		
 		self.navigationItem.title = self.schedule.dateRange
 		if self.schedule.imported {
 			self.addButton.isEnabled = false
@@ -38,6 +40,14 @@ class TrainingScheduleViewController: UITableViewController {
 			return false
 		})
     }
+	
+	override func viewDidAppear(_ animated: Bool) {
+		super.viewDidAppear(animated)
+		print("Training schedule presented")
+		if let main = self.navigationController?.viewControllers[0] as? MainMenuViewController {
+			main.hideLoadingView()
+		}
+	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -93,38 +103,15 @@ class TrainingScheduleViewController: UITableViewController {
 	}
 
 	@IBAction func addToCalendar(_ sender: UIBarButtonItem) {
-		if let army = EventManager.armyCalendar {
-			self.navigationItem.title = "Loading..."
-			self.navigationController?.view.isUserInteractionEnabled = false
-			UIApplication.shared.isNetworkActivityIndicatorVisible = true
-			
-			for item in self.items {
-				let event = EKEvent(eventStore: EventManager.eventStore)
-				event.calendar = army
-				event.title = item.title!
-				event.startDate = item.start as! Date
-				event.endDate = item.end as! Date
-				event.availability = .busy
-				event.isAllDay = false
-				event.location = item.location
-				event.notes = item.calendarNotes
-				
-				do {
-					try EventManager.eventStore.save(event, span: .thisEvent)
-				} catch {
-					print("Failed to save \(item.title): \(error)")
-					//TODO: alert user
-				}
-			}
-			self.schedule.imported = true
-			(UIApplication.shared.delegate as! AppDelegate).saveContext()
-			
+		self.navigationItem.title = "Loading..."
+		self.navigationController?.view.isUserInteractionEnabled = false
+		UIApplication.shared.isNetworkActivityIndicatorVisible = true
+		
+		TrainingScheduleManager.importSchedule(schedule: self.schedule, completion: {
 			UIApplication.shared.isNetworkActivityIndicatorVisible = false
 			self.navigationController?.view.isUserInteractionEnabled = true
 			self.navigationItem.title = self.schedule.dateRange
 			let _ = self.navigationController?.popViewController(animated: true)
-		} else {
-			//TODO: alert with no calendar error
-		}
+		})
 	}
 }

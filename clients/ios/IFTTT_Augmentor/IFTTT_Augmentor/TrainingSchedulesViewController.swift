@@ -11,6 +11,7 @@ import CoreData
 
 class TrainingSchedulesViewController: UITableViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 	private let calendarInput = UITextField(frame: CGRect.zero)
+	private var _forwardSchedule: TrainingSchedule?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +21,16 @@ class TrainingSchedulesViewController: UITableViewController, UIPickerViewDelega
 		calendarPicker.dataSource = self
 		calendarInput.inputView = calendarPicker
 		self.view.addSubview(calendarInput)
-		TrainingScheduleManager.loadTrainingSchedules()
-		//TODO: move this line to a completion handler for the training schedules loader
-		DispatchQueue.main.async {
-			self.tableView.reloadData()
+		
+		if let schedule = self._forwardSchedule {
+			print("List loaded and performing segue")
+			self.performSegue(withIdentifier: "ScheduleViewSegue", sender: schedule)
+		} else {
+			TrainingScheduleManager.loadTrainingSchedules(completion: { _ in
+				DispatchQueue.main.async {
+					self.tableView.reloadData()
+				}
+			})
 		}
     }
 	
@@ -36,6 +43,11 @@ class TrainingSchedulesViewController: UITableViewController, UIPickerViewDelega
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+	
+	func forward(_ schedule: TrainingSchedule) {
+		print("List - forwarding")
+		self._forwardSchedule = schedule
+	}
 
     // MARK: - Table view data source
 
@@ -120,7 +132,10 @@ class TrainingSchedulesViewController: UITableViewController, UIPickerViewDelega
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 		if let dest = segue.destination as? TrainingScheduleViewController {
-			if let selectedCell = sender as? UITableViewCell {
+			if let schedule = sender as? TrainingSchedule {
+				print("Setting schedule for detail view")
+				dest.schedule = schedule
+			} else if let selectedCell = sender as? UITableViewCell {
 				dest.schedule = TrainingScheduleManager.schedules[self.tableView.indexPath(for: selectedCell)!.row]
 			}
 		}

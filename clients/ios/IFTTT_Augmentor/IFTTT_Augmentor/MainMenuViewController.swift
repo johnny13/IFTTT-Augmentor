@@ -7,39 +7,42 @@
 //
 
 import UIKit
-import EventKit
 
 class MainMenuViewController: UITableViewController {
+	private var loadingView: UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-		
-		switch EKEventStore.authorizationStatus(for: .event) {
-		case .notDetermined:
-			EventManager.eventStore.requestAccess(to: .event, completion: { granted, error in
-				if !granted || error != nil {
-					DispatchQueue.main.async {
-						self.accessFailed()
-					}
-				}
-			})
-		case .restricted, .denied:
-			self.accessFailed()
-		default:
-			break
-		}
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-	private func accessFailed() {
-		let alert = UIAlertController(title: "Calendar Access Required", message: "This app cannot function without access to the calendar", preferredStyle: .alert)
-		alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in
-			UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
-		}))
-		self.present(alert, animated: true, completion: nil)
+	
+	func viewTrainingSchedule(_ schedule: TrainingSchedule) {
+		self.performSegue(withIdentifier: "TrainingScheduleSegue", sender: schedule)
+	}
+	
+	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+		if let schedule = sender as? TrainingSchedule {
+			if let dest = segue.destination as? TrainingSchedulesViewController {
+				dest.forward(schedule)
+			}
+		}
+		super.prepare(for: segue, sender: sender)
+	}
+	
+	func showLoadingView() {
+		self.loadingView = UIView(frame: CGRect(origin: CGPoint.zero, size: (self.view.window?.bounds.size)!))
+		self.loadingView?.backgroundColor = UIColor.white
+		//TODO: add content to loading view
+		self.navigationController?.view.addSubview(self.loadingView!)
+	}
+	
+	func hideLoadingView() {
+		if let view = self.loadingView {
+			view.removeFromSuperview()
+		}
 	}
 }
