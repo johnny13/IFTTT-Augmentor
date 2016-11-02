@@ -19,8 +19,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		let notifications = UNUserNotificationCenter.current()
 		let actions = [UNNotificationAction(identifier: "scheduleImport", title: "Import", options: []), UNNotificationAction(identifier: "scheduleView", title: "View", options: .foreground)]
-		let category = UNNotificationCategory(identifier: "scheduleCategory", actions: actions, intentIdentifiers: [], options: [])
-		notifications.setNotificationCategories([category])
+		let scheduleCategory = UNNotificationCategory(identifier: "scheduleCategory", actions: actions, intentIdentifiers: [], options: [])
+		let importCompleteCategory = UNNotificationCategory(identifier: "importCompleteCategory", actions: [], intentIdentifiers: [], options: [])
+		notifications.setNotificationCategories([scheduleCategory, importCompleteCategory])
 		notifications.delegate = self
 		notifications.requestAuthorization(options: [.badge, .alert, .sound], completionHandler: { granted, error in
 			if let error = error {
@@ -111,7 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	
 	func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
 		let token = deviceToken.reduce("", {$0 + String(format: "%02X", $1)})
-		print("Registered for remote notifications: \(token)")
+		URLSession.shared.dataTask(with: URL(string: "\(ServerManager.SERVER_ADDRESS)/register?token=\(token)")!).resume()
 	}
 	
 	func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -120,44 +121,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	
 	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
 		if response.notification.request.content.categoryIdentifier == "scheduleCategory" {
-			if let nav = self.window?.rootViewController as? RootNavigationViewController {
-				if let main = nav.viewControllers[0] as? MainMenuViewController {
-					main.showLoadingView()
-					if let sched = response.notification.request.content.userInfo["schedule"] as? String {
-						TrainingScheduleManager.loadTrainingSchedules(completion: { schedules in
-							var schedule: TrainingSchedule?
-							for sch in schedules {
-								if sch.file == sched {
-									schedule = sch
-									break
-								}
-							}
-							if let schedule = schedule {
-								switch response.actionIdentifier {
-								case "scheduleImport":
-									main.hideLoadingView()
-									TrainingScheduleManager.importSchedule(schedule: schedule, completion: {
-										//TODO: send local notification to inform user of successful import
-										completionHandler()
-									})
-								case "scheduleView":
-									self.viewSchedule(schedule: schedule)
-									completionHandler()
-								default:
-									self.viewSchedule(schedule: schedule)
-									completionHandler()
-								}
-							}
-						})
+			if let sched = response.notification.request.content.userInfo["schedule"] as? String {
+				TrainingScheduleManager.loadTrainingSchedules(completion: { schedules in
+					var schedule: TrainingSchedule?
+					for sch in schedules {
+						if sch.file == sched {
+							schedule = sch
+							break
+						}
 					}
+					if let schedule = schedule {
+						switch response.actionIdentifier {
+						case "scheduleImport":
+							TrainingScheduleManager.importSchedule(schedule: schedule, completion: { imported in
+								if imported {
+									let message = UNMutableNotificationContent()
+									message.title = "Import Complete"
+									message.body = "The training schedule was successfully imported"
+									message.categoryIdentifier = "importCompleteCategory"
+									message.sound = UNNotificationSound.default()
+									message.userInfo = ["schedule": schedule.file!]
+									let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+									UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: message, trigger: trigger))
+								} else {
+									let message = UNMutableNotificationContent()
+									message.title = "Import Failed"
+									message.body = "The training schedule has already been imported"
+									message.categoryIdentifier = "importCompleteCategory"
+									message.sound = UNNotificationSound.default()
+									message.userInfo = ["schedule": schedule.file!]
+									let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+									UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: message, trigger: trigger))
+								}
+								completionHandler()
+							})
+						case "scheduleView":
+							self.viewSchedule(schedule)
+							completionHandler()
+						default:
+							self.viewSchedule(schedule)
+							completionHandler()
+						}
+					}
+				})
+			}
+		} else if response.notification.request.content.categoryIdentifier == "importCompleteCategory" {
+			if let id = response.notification.request.content.userInfo["schedule"] as? String {
+				if let schedule = TrainingScheduleManager.getScheduleWithIdentifier(id) {
+					self.viewSchedule(schedule)
 				}
 			}
+			completionHandler()
 		} else {
 			completionHandler()
 		}
 	}
 	
-	private func viewSchedule(schedule: TrainingSchedule) {
+	private func viewSchedule(_ schedule: TrainingSchedule) {
 		if let nav = self.window?.rootViewController as? RootNavigationViewController {
 			nav.popToRootViewController(animated: true)
 			if let main = nav.viewControllers[0] as? MainMenuViewController {
@@ -167,7 +187,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	}
 	
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-		print("Notification received while app is in the foreground")
+		let alert = UIAlertController(title: notification.request.content.title, message: notification.request.content.body, preferredStyle: .alert)
+		alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+		self.window?.rootViewController?.present(alert, animated: true, completion: nil)
 	}
 }
 

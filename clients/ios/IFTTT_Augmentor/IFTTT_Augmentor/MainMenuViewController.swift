@@ -21,28 +21,11 @@ class MainMenuViewController: UITableViewController {
     }
 	
 	func viewTrainingSchedule(_ schedule: TrainingSchedule) {
-		self.performSegue(withIdentifier: "TrainingScheduleSegue", sender: schedule)
-	}
-	
-	override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-		if let schedule = sender as? TrainingSchedule {
-			if let dest = segue.destination as? TrainingSchedulesViewController {
-				dest.forward(schedule)
-			}
-		}
-		super.prepare(for: segue, sender: sender)
-	}
-	
-	func showLoadingView() {
-		self.loadingView = UIView(frame: CGRect(origin: CGPoint.zero, size: (self.view.window?.bounds.size)!))
-		self.loadingView?.backgroundColor = UIColor.white
-		//TODO: add content to loading view
-		self.navigationController?.view.addSubview(self.loadingView!)
-	}
-	
-	func hideLoadingView() {
-		if let view = self.loadingView {
-			view.removeFromSuperview()
+		DispatchQueue.main.async {
+			let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
+			let controller = storyboard.instantiateViewController(withIdentifier: "TrainingScheduleController") as! TrainingScheduleViewController
+			controller.schedule = schedule
+			self.navigationController?.pushViewController(controller, animated: true)
 		}
 	}
 }

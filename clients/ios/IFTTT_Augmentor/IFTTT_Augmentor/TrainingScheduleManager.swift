@@ -102,7 +102,7 @@ class TrainingScheduleManager {
 								}
 							}
 							instance.loadCount -= 1
-							}.resume()
+						}.resume()
 						
 						instance._schedules.append(schedule)
 					}
@@ -113,13 +113,16 @@ class TrainingScheduleManager {
 			}
 			if let e = err {
 				print("Failed to connect to server: \(e)")
-				//TODO: alert user
+				let alert = UIAlertController(title: "Error", message: "Failed to connect to the server", preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+				UIApplication.shared.delegate?.window!?.rootViewController?.present(alert, animated: true, completion: nil)
 			}
 			instance.loadCount -= 1
 		}.resume()
 	}
 	
-	class func importSchedule(schedule: TrainingSchedule, completion: (() -> Void)?) {
+	class func importSchedule(schedule: TrainingSchedule, completion: ((_ imported: Bool) -> Void)?) {
+		var imported = false
 		if !schedule.imported {
 			if let army = EventManager.armyCalendar {
 				for item in schedule.items?.allObjects as! Array<TrainingScheduleItem> {
@@ -137,19 +140,31 @@ class TrainingScheduleManager {
 						try EventManager.eventStore.save(event, span: .thisEvent)
 					} catch {
 						print("Failed to save \(item.title): \(error)")
-						//TODO: alert user
+						let alert = UIAlertController(title: "Error", message: "Failed to save \(item.title)", preferredStyle: .alert)
+						alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+						UIApplication.shared.delegate?.window!?.rootViewController?.present(alert, animated: true, completion: nil)
 					}
 				}
 				schedule.imported = true
+				imported = true
 				(UIApplication.shared.delegate as! AppDelegate).saveContext()
 			}
 		}
-		completion?()
+		completion?(imported)
 	}
 	
 	class var schedules: Array<TrainingSchedule> {
 		get {
 			return instance._schedules
 		}
+	}
+	
+	class func getScheduleWithIdentifier(_ id: String!) -> TrainingSchedule? {
+		for schedule in schedules {
+			if schedule.file == id {
+				return schedule
+			}
+		}
+		return nil
 	}
 }

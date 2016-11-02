@@ -20,8 +20,6 @@ class TrainingScheduleViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		print("Loading detail")
-		
 		self.navigationItem.title = self.schedule.dateRange
 		if self.schedule.imported {
 			self.addButton.isEnabled = false
@@ -40,14 +38,6 @@ class TrainingScheduleViewController: UITableViewController {
 			return false
 		})
     }
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		print("Training schedule presented")
-		if let main = self.navigationController?.viewControllers[0] as? MainMenuViewController {
-			main.hideLoadingView()
-		}
-	}
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -107,7 +97,7 @@ class TrainingScheduleViewController: UITableViewController {
 		self.navigationController?.view.isUserInteractionEnabled = false
 		UIApplication.shared.isNetworkActivityIndicatorVisible = true
 		
-		TrainingScheduleManager.importSchedule(schedule: self.schedule, completion: {
+		TrainingScheduleManager.importSchedule(schedule: self.schedule, completion: { imported in
 			UIApplication.shared.isNetworkActivityIndicatorVisible = false
 			self.navigationController?.view.isUserInteractionEnabled = true
 			self.navigationItem.title = self.schedule.dateRange
