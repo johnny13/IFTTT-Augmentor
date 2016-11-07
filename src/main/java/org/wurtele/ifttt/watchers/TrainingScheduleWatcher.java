@@ -182,7 +182,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 						.withSandboxDestination()
 						.build();
 				Date start = DateUtils.truncate(entries.get(0).getStart(), Calendar.DATE);
-				Date end = DateUtils.truncate(entries.get(entries.size() - 1), Calendar.DATE);
+				Date end = DateUtils.truncate(entries.get(entries.size() - 1).getEnd(), Calendar.DATE);
 				DateFormat df = new SimpleDateFormat("MMM d, yyyy");
 				String payload = APNS.newPayload()
 						.category("scheduleCategory")
