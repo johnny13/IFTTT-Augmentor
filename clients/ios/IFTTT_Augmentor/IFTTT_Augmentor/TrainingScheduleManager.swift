@@ -80,7 +80,6 @@ class TrainingScheduleManager {
 						schedule.file = id
 						schedule.start = NSDate(timeIntervalSince1970: startMillis / 1000)
 						schedule.end = NSDate(timeIntervalSince1970: endMillis / 1000)
-						schedule.imported = false
 						
 						instance.loadCount += 1
 						URLSession.shared.dataTask(with: URL(string: "\(ServerManager.SERVER_ADDRESS)/schedules/\(sender)/\(file)")!) { data, response, err in
@@ -138,6 +137,7 @@ class TrainingScheduleManager {
 					
 					do {
 						try EventManager.eventStore.save(event, span: .thisEvent)
+						item.event = event.eventIdentifier
 					} catch {
 						print("Failed to save \(item.title): \(error)")
 						let alert = UIAlertController(title: "Error", message: "Failed to save \(item.title)", preferredStyle: .alert)
@@ -145,7 +145,6 @@ class TrainingScheduleManager {
 						UIApplication.shared.delegate?.window!?.rootViewController?.present(alert, animated: true, completion: nil)
 					}
 				}
-				schedule.imported = true
 				imported = true
 				(UIApplication.shared.delegate as! AppDelegate).saveContext()
 			}

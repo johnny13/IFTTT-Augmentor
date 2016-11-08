@@ -3,12 +3,12 @@
     <entity name="TrainingSchedule" representedClassName="TrainingSchedule" syncable="YES" codeGenerationType="class">
         <attribute name="end" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="file" attributeType="String" indexed="YES" syncable="YES"/>
-        <attribute name="imported" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="start" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="TrainingScheduleItem" inverseName="schedule" inverseEntity="TrainingScheduleItem" syncable="YES"/>
     </entity>
     <entity name="TrainingScheduleItem" representedClassName="TrainingScheduleItem" syncable="YES" codeGenerationType="class">
         <attribute name="end" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="event" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="group" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="instructor" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="location" optional="YES" attributeType="String" syncable="YES"/>
@@ -23,8 +23,8 @@
         <attribute name="value" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="TrainingSchedule" positionX="-36" positionY="0" width="128" height="118"/>
-        <element name="TrainingScheduleItem" positionX="135" positionY="-45" width="128" height="180"/>
+        <element name="TrainingSchedule" positionX="-36" positionY="0" width="128" height="105"/>
+        <element name="TrainingScheduleItem" positionX="135" positionY="-45" width="128" height="195"/>
         <element name="UserOption" positionX="54" positionY="36" width="128" height="75"/>
     </elements>
 </model>

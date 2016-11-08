@@ -33,4 +33,13 @@ extension TrainingSchedule {
 			}
 		}
 	}
+	
+	var imported: Bool {
+		for item in self.items?.allObjects as! Array<TrainingScheduleItem> {
+			if item.event == nil {
+				return false
+			}
+		}
+		return true
+	}
 }
