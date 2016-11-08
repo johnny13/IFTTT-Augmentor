@@ -16,15 +16,16 @@ class TrainingScheduleViewController: UITableViewController {
 	private var selectedCell: IndexPath?
 	
 	@IBOutlet weak var addButton: UIBarButtonItem!
+	@IBOutlet weak var deleteButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 		
 		self.navigationItem.title = self.schedule.dateRange
 		if self.schedule.imported {
-			self.addButton.isEnabled = false
+			self.navigationItem.rightBarButtonItems?.removeFirst()
 		} else {
-			self.addButton.isEnabled = true
+			self.navigationItem.rightBarButtonItems?.removeLast()
 		}
 		
 		self.items = self.schedule.items?.allObjects as! Array<TrainingScheduleItem>
@@ -98,6 +99,19 @@ class TrainingScheduleViewController: UITableViewController {
 		UIApplication.shared.isNetworkActivityIndicatorVisible = true
 		
 		TrainingScheduleManager.importSchedule(schedule: self.schedule, completion: { imported in
+			UIApplication.shared.isNetworkActivityIndicatorVisible = false
+			self.navigationController?.view.isUserInteractionEnabled = true
+			self.navigationItem.title = self.schedule.dateRange
+			let _ = self.navigationController?.popViewController(animated: true)
+		})
+	}
+	
+	@IBAction func removeFromCalendar(_ sender: UIBarButtonItem) {
+		self.navigationItem.title = "Loading..."
+		self.navigationController?.view.isUserInteractionEnabled = false
+		UIApplication.shared.isNetworkActivityIndicatorVisible = true
+		
+		TrainingScheduleManager.removeSchedule(schedule: self.schedule, completion: { removed in
 			UIApplication.shared.isNetworkActivityIndicatorVisible = false
 			self.navigationController?.view.isUserInteractionEnabled = true
 			self.navigationItem.title = self.schedule.dateRange

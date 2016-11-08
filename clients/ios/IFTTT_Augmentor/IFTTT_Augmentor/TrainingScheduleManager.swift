@@ -145,11 +145,36 @@ class TrainingScheduleManager {
 						UIApplication.shared.delegate?.window!?.rootViewController?.present(alert, animated: true, completion: nil)
 					}
 				}
-				imported = true
 				(UIApplication.shared.delegate as! AppDelegate).saveContext()
+				imported = true
 			}
 		}
 		completion?(imported)
+	}
+	
+	class func removeSchedule(schedule: TrainingSchedule, completion: ((_ removed: Bool) -> Void)?) {
+		var removed = false
+		if schedule.imported {
+			do {
+				for item in schedule.items?.allObjects as! Array<TrainingScheduleItem> {
+					if let identifier = item.event {
+						if let event = EventManager.eventStore.event(withIdentifier: identifier) {
+							try EventManager.eventStore.remove(event, span: .thisEvent)
+							item.event = nil
+						}
+					}
+				}
+				try EventManager.eventStore.commit()
+				(UIApplication.shared.delegate as! AppDelegate).saveContext()
+				removed = true
+			} catch {
+				print("Failed to delete training schedule events: \(error)")
+				let alert = UIAlertController(title: "Error", message: "Failed to delete training schedule events", preferredStyle: .alert)
+				alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+				UIApplication.shared.delegate?.window!?.rootViewController?.present(alert, animated: true, completion: nil)
+			}
+		}
+		completion?(removed)
 	}
 	
 	class var schedules: Array<TrainingSchedule> {
