@@ -12,6 +12,8 @@ import CoreData
 
 class EventManager {
 	private static let ARMY_CALENDAR_KEY = "ARMY_CALENDAR"
+	private static let REMINDER_KEY = "REMINDERS"
+	
 	private static var _instance: EventManager?
 	
 	private class var instance: EventManager {
@@ -31,6 +33,10 @@ class EventManager {
 	
 	class var calendars: [EKCalendar] {
 		return eventStore.calendars(for: .event)
+	}
+	
+	class var reminders: [EKCalendar] {
+		return eventStore.calendars(for: .reminder)
 	}
 	
 	class var armyCalendar: EKCalendar? {
@@ -81,6 +87,58 @@ class EventManager {
 				try app.context.save()
 			} catch {
 				print("Failed to save army calendar user option: \(error)")
+			}
+		}
+	}
+	
+	class var reminderCalendar: EKCalendar? {
+		get {
+			let fetchRequest: NSFetchRequest<UserOption> = UserOption.fetchRequest()
+			fetchRequest.predicate = NSPredicate(format: "key = %@", REMINDER_KEY)
+			let app = UIApplication.shared.delegate as! AppDelegate
+			
+			do {
+				let results = try app.context.fetch(fetchRequest)
+				if results.count == 1 {
+					if let selected = results[0].value {
+						for calendar in reminders {
+							if calendar.calendarIdentifier == selected {
+								return calendar
+							}
+						}
+					}
+				} else if results.count > 0 {
+					print("Invalid user option count for \(REMINDER_KEY)")
+					for result in results {
+						app.context.delete(result)
+					}
+					try? app.context.save()
+				}
+			} catch {
+				print("Failed to load user option: \(error)")
+			}
+			return nil
+		}
+		
+		set {
+			let app = UIApplication.shared.delegate as! AppDelegate
+			
+			let fetchRequest: NSFetchRequest<UserOption> = UserOption.fetchRequest()
+			fetchRequest.predicate = NSPredicate(format: "key = %@", REMINDER_KEY)
+			if let results = try? app.context.fetch(fetchRequest) {
+				for result in results {
+					app.context.delete(result)
+				}
+			}
+			if let cal = newValue {
+				let option = UserOption(context: app.context)
+				option.key = REMINDER_KEY
+				option.value = cal.calendarIdentifier
+			}
+			do {
+				try app.context.save()
+			} catch {
+				print("Failed to save reminder calendar user option: \(error)")
 			}
 		}
 	}

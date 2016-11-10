@@ -44,6 +44,8 @@
 	</dict>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Calendar access is required to write training schedule events to your calendar</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>Reminders access is required to create chore reminders</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

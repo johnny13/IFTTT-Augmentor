@@ -28,6 +28,21 @@ class RootNavigationViewController: UINavigationController {
 		default:
 			break
 		}
+		
+		switch EKEventStore.authorizationStatus(for: .reminder) {
+		case .notDetermined:
+			EventManager.eventStore.requestAccess(to: .reminder, completion: { granted, error in
+				if !granted || error != nil {
+					DispatchQueue.main.async {
+						self.accessFailed()
+					}
+				}
+			})
+		case .restricted, .denied:
+			self.accessFailed()
+		default:
+			break
+		}
     }
 
     override func didReceiveMemoryWarning() {
@@ -36,7 +51,7 @@ class RootNavigationViewController: UINavigationController {
 	}
 	
 	private func accessFailed() {
-		let alert = UIAlertController(title: "Calendar Access Required", message: "This app cannot function without access to the calendar", preferredStyle: .alert)
+		let alert = UIAlertController(title: "Calendar & Reminder Access Required", message: "This app cannot function without access to the calendar and reminders", preferredStyle: .alert)
 		alert.addAction(UIAlertAction(title: "Settings", style: .default, handler: { action in
 			UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
 		}))
