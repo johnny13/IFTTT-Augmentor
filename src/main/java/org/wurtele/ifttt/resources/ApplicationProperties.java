@@ -40,11 +40,19 @@ public class ApplicationProperties extends Properties {
 		getInstance();
 	}
 	
+	public static Path getDropboxPath() {
+		return Paths.get(getInstance().getProperty("DROPBOX.DIR"));
+	}
+	
 	public static Path getWorkTimesFile() {
-		return Paths.get(getInstance().getProperty("WORK_TIMES"));
+		return getDropboxPath().resolve("iOS Location").resolve("work_times.csv.txt");
 	}
 	
 	public static Path getGmailDirectory() {
-		return Paths.get(getInstance().getProperty("GMAIL_DIR"));
+		return getDropboxPath().resolve("Gmail");
+	}
+	
+	public static Path getLaundryFile() {
+		return getDropboxPath().resolve("Laundry").resolve("lg_smart_washer-complete.txt");
 	}
 }

@@ -17,7 +17,6 @@
 package org.wurtele.ifttt.watchers;
 
 import com.notnoop.apns.APNS;
-import com.notnoop.apns.ApnsService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -45,6 +44,7 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.wurtele.ifttt.model.TrainingScheduleEntry;
 import org.wurtele.ifttt.push.PushDevices;
+import org.wurtele.ifttt.utils.PushUtils;
 import org.wurtele.ifttt.watchers.base.SimpleDirectoryWatcher;
 
 /**
@@ -177,10 +177,6 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 					oos.writeObject(entries);
 				}
 				logger.info("Processed " + path);
-				ApnsService push = APNS.newService()
-						.withCert(Thread.currentThread().getContextClassLoader().getResourceAsStream("IFTTT.p12"), "ifTTT")
-						.withSandboxDestination()
-						.build();
 				Date start = DateUtils.truncate(entries.get(0).getStart(), Calendar.DATE);
 				Date end = DateUtils.truncate(entries.get(entries.size() - 1).getEnd(), Calendar.DATE);
 				DateFormat df = new SimpleDateFormat("MMM d, yyyy");
@@ -192,7 +188,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 						.customField("schedule", path.getParent().getFileName().toString() + "/" + FilenameUtils.getBaseName(path.getFileName().toString()))
 						.build();
 				PushDevices.getDevices().stream().forEach((device) -> {
-					push.push(device, payload);
+					PushUtils.getService().push(device, payload);
 				});
 			}
 		} catch (Exception e) {

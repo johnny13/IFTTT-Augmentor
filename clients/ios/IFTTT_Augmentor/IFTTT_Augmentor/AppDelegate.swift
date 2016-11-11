@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import UserNotifications
+import EventKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -18,10 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		let notifications = UNUserNotificationCenter.current()
-		let actions = [UNNotificationAction(identifier: "scheduleImport", title: "Import", options: []), UNNotificationAction(identifier: "scheduleView", title: "View", options: .foreground)]
-		let scheduleCategory = UNNotificationCategory(identifier: "scheduleCategory", actions: actions, intentIdentifiers: [], options: [])
+		let scheduleCategory = UNNotificationCategory(identifier: "scheduleCategory",
+		                                              actions: [UNNotificationAction(identifier: "scheduleImport", title: "Import", options: []),
+		                                                        UNNotificationAction(identifier: "scheduleView", title: "View", options: .foreground)],
+		                                              intentIdentifiers: [], options: [])
 		let importCompleteCategory = UNNotificationCategory(identifier: "importCompleteCategory", actions: [], intentIdentifiers: [], options: [])
-		notifications.setNotificationCategories([scheduleCategory, importCompleteCategory])
+		let laundryCategory = UNNotificationCategory(identifier: "laundryCategory",
+		                                             actions: [UNNotificationAction(identifier: "laundryRemind", title: "Create Reminder", options: [])],
+		                                             intentIdentifiers: [], options: [])
+		notifications.setNotificationCategories([scheduleCategory, importCompleteCategory, laundryCategory])
 		notifications.delegate = self
 		notifications.requestAuthorization(options: [.badge, .alert, .sound], completionHandler: { granted, error in
 			if let error = error {
@@ -172,6 +178,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 				}
 			}
 			completionHandler()
+		} else if response.notification.request.content.categoryIdentifier == "laundryCategory" {
+			if response.actionIdentifier == "laundryRemind" {
+				if let reminders = EventManager.reminderCalendar {
+					let reminder = EKReminder(eventStore: EventManager.eventStore)
+					reminder.calendar = reminders
+					reminder.title = "Change the laundry"
+					reminder.startDateComponents = NSCalendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: Date())
+					reminder.dueDateComponents = NSCalendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: Date())
+					reminder.isCompleted = false
+					reminder.alarms = [EKAlarm(relativeOffset: 60 * 60)]
+					do {
+						try EventManager.eventStore.save(reminder, commit: true)
+					} catch {
+						print("Failed to save laundry reminder: \(error)")
+						let message = UNMutableNotificationContent()
+						message.title = "Create Reminder Failed"
+						message.body = "The laundry reminder failed to create"
+						message.sound = UNNotificationSound.default()
+						let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+						UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: message, trigger: trigger))
+					}
+				} else {
+					let message = UNMutableNotificationContent()
+					message.title = "Create Reminder Failed"
+					message.body = "No reminder list specified"
+					message.sound = UNNotificationSound.default()
+					let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.5, repeats: false)
+					UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: UUID().uuidString, content: message, trigger: trigger))
+				}
+			}
+			completionHandler()
 		} else {
 			completionHandler()
 		}
@@ -187,9 +224,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 	}
 	
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-		let alert = UIAlertController(title: notification.request.content.title, message: notification.request.content.body, preferredStyle: .alert)
-		alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-		self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+		if notification.request.content.categoryIdentifier == "laundryCategory" {
+			let alert = UIAlertController(title: notification.request.content.title, message: notification.request.content.body, preferredStyle: .alert)
+			if let reminders = EventManager.reminderCalendar {
+				alert.addAction(UIAlertAction(title: "Create Reminder", style: .default, handler: { action in
+					let reminder = EKReminder(eventStore: EventManager.eventStore)
+					reminder.calendar = reminders
+					reminder.title = "Change the laundry"
+					reminder.startDateComponents = NSCalendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: Date())
+					reminder.dueDateComponents = NSCalendar.current.dateComponents([.minute, .hour, .day, .month, .year], from: Date())
+					reminder.isCompleted = false
+					reminder.alarms = [EKAlarm(relativeOffset: 60 * 60)]
+					do {
+						try EventManager.eventStore.save(reminder, commit: true)
+					} catch {
+						print("Failed to save laundry reminder: \(error)")
+						let failed = UIAlertController(title: "Create Reminder Failed", message: "The laundry reminder failed to create", preferredStyle: .alert)
+						failed.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+						self.window?.rootViewController?.present(failed, animated: true, completion: nil)
+					}
+				}))
+			}
+			alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+			self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+		} else {
+			let alert = UIAlertController(title: notification.request.content.title, message: notification.request.content.body, preferredStyle: .alert)
+			alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+			self.window?.rootViewController?.present(alert, animated: true, completion: nil)
+		}
 	}
 }
 

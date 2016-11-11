@@ -11,6 +11,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import org.jboss.logging.Logger;
+import org.wurtele.ifttt.watchers.LaundryWatcher;
 import org.wurtele.ifttt.watchers.TrainingScheduleWatcher;
 import org.wurtele.ifttt.watchers.base.SimpleDirectoryWatcher;
 
@@ -49,6 +50,13 @@ public class ResourceManager {
 			watchers.add(tsWatcher);
 		} catch (Exception e) {
 			logger.error("Failed to create training schedule watcher", e);
+		}
+		try {
+			LaundryWatcher watcher = new LaundryWatcher(ApplicationProperties.getLaundryFile());
+			watcher.watch();
+			watchers.add(watcher);
+		} catch (Exception e) {
+			logger.error("Failed to create laundry watcher", e);
 		}
 	}
 	
