@@ -44,7 +44,7 @@ import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.wurtele.ifttt.model.TrainingScheduleEntry;
 import org.wurtele.ifttt.push.PushDevices;
-import org.wurtele.ifttt.utils.PushUtils;
+import org.wurtele.ifttt.push.PushUtils;
 import org.wurtele.ifttt.watchers.base.SimpleDirectoryWatcher;
 
 /**

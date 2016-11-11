@@ -24,7 +24,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.wurtele.ifttt.push.PushDevices;
-import org.wurtele.ifttt.utils.PushUtils;
+import org.wurtele.ifttt.push.PushUtils;
 import org.wurtele.ifttt.watchers.base.SimpleFileWatcher;
 
 /**
