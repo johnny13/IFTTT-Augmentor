@@ -45,7 +45,7 @@ class TrainingScheduleManager {
 			let fetchRequest: NSFetchRequest<TrainingSchedule> = TrainingSchedule.fetchRequest()
 			_instance!._schedules = try! context.fetch(fetchRequest)
 			_instance!._schedules.sort(by: { lhs, rhs in
-				return lhs.start!.compare(rhs.start as! Date) == .orderedDescending
+				return lhs.start!.compare(rhs.start! as Date) == .orderedDescending
 			})
 		}
 		return _instance!
@@ -82,7 +82,9 @@ class TrainingScheduleManager {
 						schedule.end = NSDate(timeIntervalSince1970: endMillis / 1000)
 						
 						instance.loadCount += 1
-						URLSession.shared.dataTask(with: URL(string: "\(ServerManager.SERVER_ADDRESS)/schedules/\(sender)/\(file)")!) { data, response, err in
+						let encodedFile = file.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!
+						let urlString = "\(ServerManager.SERVER_ADDRESS)/schedules/\(sender)/\(encodedFile)"
+						URLSession.shared.dataTask(with: URL(string: urlString)!) { data, response, err in
 							if let data = data {
 								if let json = try? JSONSerialization.jsonObject(with: data) {
 									for event in json as? [AnyObject] ?? [] {
@@ -106,7 +108,7 @@ class TrainingScheduleManager {
 						instance._schedules.append(schedule)
 					}
 					instance._schedules.sort(by: { lhs, rhs in
-						return lhs.start!.compare(rhs.start as! Date) == .orderedDescending
+						return lhs.start!.compare(rhs.start! as Date) == .orderedDescending
 					})
 				}
 			}
@@ -128,8 +130,8 @@ class TrainingScheduleManager {
 					let event = EKEvent(eventStore: EventManager.eventStore)
 					event.calendar = army
 					event.title = item.title!
-					event.startDate = item.start as! Date
-					event.endDate = item.end as! Date
+					event.startDate = item.start! as Date
+					event.endDate = item.end! as Date
 					event.availability = .busy
 					event.isAllDay = false
 					event.location = item.location
@@ -139,8 +141,8 @@ class TrainingScheduleManager {
 						try EventManager.eventStore.save(event, span: .thisEvent)
 						item.event = event.eventIdentifier
 					} catch {
-						print("Failed to save \(item.title): \(error)")
-						let alert = UIAlertController(title: "Error", message: "Failed to save \(item.title)", preferredStyle: .alert)
+						print("Failed to save \(String(describing: item.title)): \(error)")
+						let alert = UIAlertController(title: "Error", message: "Failed to save \(String(describing: item.title))", preferredStyle: .alert)
 						alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 						UIApplication.shared.delegate?.window!?.rootViewController?.present(alert, animated: true, completion: nil)
 					}

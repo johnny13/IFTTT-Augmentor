@@ -27,6 +27,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.wurtele.ifttt.push.PushDevices;
+import org.wurtele.ifttt.push.PushUtils;
 
 /**
  *
@@ -57,10 +58,7 @@ public class PushRegistrationService {
 	public Response pushTest() {
 		try {
 			URL url = Thread.currentThread().getContextClassLoader().getResource("IFTTT.p12");
-			ApnsService service = APNS.newService()
-					.withCert(url.openStream(), "ifTTT")
-					.withSandboxDestination()
-					.build();
+			ApnsService service = PushUtils.getService();
 			String payload = APNS.newPayload()
 					.category("scheduleCategory")
 					.alertBody("This is a test notification")

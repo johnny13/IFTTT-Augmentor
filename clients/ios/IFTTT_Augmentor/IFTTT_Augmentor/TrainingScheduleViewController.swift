@@ -30,7 +30,7 @@ class TrainingScheduleViewController: UITableViewController {
 		
 		self.items = self.schedule.items?.allObjects as! Array<TrainingScheduleItem>
 		self.items.sort(by: { lhs, rhs in
-			if let lstart = lhs.start as? Date, let rstart = rhs.start as? Date, let lend = rhs.end as? Date, let rend = rhs.end as? Date {
+			if let lstart = lhs.start as Date?, let rstart = rhs.start as Date?, let lend = rhs.end as Date?, let rend = rhs.end as Date? {
 				if lstart == rstart {
 					return lend < rend
 				}

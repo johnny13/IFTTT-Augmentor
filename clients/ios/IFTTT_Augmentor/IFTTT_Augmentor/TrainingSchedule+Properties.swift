@@ -11,11 +11,11 @@ import Foundation
 extension TrainingSchedule {
 	
 	var startDate: Date? {
-		return self.start as? Date
+		return self.start as Date?
 	}
 	
 	var endDate: Date? {
-		return self.end as? Date
+		return self.end as Date?
 	}
 	
 	var dateRange: String? {

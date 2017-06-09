@@ -14,7 +14,7 @@ extension TrainingScheduleItem {
 		get {
 			let formatter = DateFormatter()
 			formatter.dateFormat = "MMM d HH:mm"
-			if let s = self.start as? Date, let e = self.end as? Date {
+			if let s = self.start as Date?, let e = self.end as Date? {
 				return "\(formatter.string(from: s)) - \(formatter.string(from: e))"
 			} else {
 				return nil
