@@ -198,7 +198,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 	}
 	
 	private void processPDF(Path path) {
-		logger.error("PDF processing not implemented yet");
+		logger.debug("PDF processing not implemented yet: " + path);
 	}
 	
 	public static Map<Path, List<TrainingScheduleEntry>> getTrainingSchedules() {

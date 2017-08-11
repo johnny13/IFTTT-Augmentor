@@ -54,6 +54,7 @@ public class ResourceManager {
 		try {
 			LaundryWatcher watcher = new LaundryWatcher(ApplicationProperties.getLaundryFile());
 			watcher.watch();
+			logger.info("Initialized laundry watcher");
 			watchers.add(watcher);
 		} catch (Exception e) {
 			logger.error("Failed to create laundry watcher", e);

@@ -35,12 +35,13 @@ public class LaundryWatcher extends SimpleFileWatcher {
 	
 	public LaundryWatcher(Path watchFile) throws IOException {
 		super(watchFile);
+		logger.info("Watching " + watchFile + " for laundry notices");
 	}
 
 	@Override
 	public void handleFileCreate(Path path) {
 		try {
-			
+			logger.info("Laundry file created");
 			DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 			String payload = APNS.newPayload()
 					.category("laundryCategory")
@@ -50,6 +51,7 @@ public class LaundryWatcher extends SimpleFileWatcher {
 					.build();
 			PushDevices.getDevices().stream().forEach((device) -> {
 				PushUtils.getService().push(device, payload);
+				logger.info("Sent laundry notification to " + device);
 			});
 			Files.delete(path);
 		} catch (Exception e) {
