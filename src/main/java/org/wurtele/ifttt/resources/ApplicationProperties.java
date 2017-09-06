@@ -53,6 +53,6 @@ public class ApplicationProperties extends Properties {
 	}
 	
 	public static Path getLaundryFile() {
-		return getDropboxPath().resolve("Laundry").resolve("lg_smart_washer-complete.txt");
+		return getDropboxPath().resolve("Laundry").resolve("LG Smart Washer-complete.txt");
 	}
 }
