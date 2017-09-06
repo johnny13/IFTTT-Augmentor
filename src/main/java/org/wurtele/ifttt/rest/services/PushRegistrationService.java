@@ -35,8 +35,9 @@ import org.wurtele.ifttt.push.PushUtils;
  */
 @Path("register")
 public class PushRegistrationService {
+
 	private final Logger logger = Logger.getLogger(getClass());
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response register(
@@ -46,12 +47,13 @@ public class PushRegistrationService {
 			PushDevices.addDevice(token);
 			logger.info("Registered " + token + " for push notifications");
 			return Response.ok().build();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			logger.error("Failed to register for push notifications", e);
 			return Response.serverError().build();
 		}
 	}
-	
+
 	@GET
 	@Path("test")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -64,14 +66,15 @@ public class PushRegistrationService {
 					.alertBody("This is a test notification")
 					.alertTitle("Test Alert")
 					.sound("default")
-					.customField("schedule", "michaelsmitchell34mil@mailmil/TS_5-6_NOV_2016")
+					.customField("schedule", "michael.s.mitchell34.mil@mail.mil/TS_5-6_NOV_2016")
 					.build();
 			PushDevices.getDevices().stream().forEach((device) -> {
 				service.push(device, payload);
 			});
 			logger.info("Sent: " + payload);
 			return Response.ok().build();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			logger.error("Failed to send push notification", e);
 			return Response.serverError().build();
 		}

@@ -52,6 +52,7 @@ import org.wurtele.ifttt.watchers.base.SimpleDirectoryWatcher;
  * @author Douglas Wurtele
  */
 public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
+
 	private static final Map<Path, List<TrainingScheduleEntry>> TRAINING_SCHEDULES = new HashMap<>();
 	private static final Set<Path> FAILED = new HashSet<>();
 
@@ -85,7 +86,8 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 				Files.delete(processedPath(path));
 				TRAINING_SCHEDULES.remove(processedPath(path));
 			}
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			logger.error("Failed to remove old training schedule data: " + processedPath(path), e);
 		}
 	}
@@ -95,23 +97,24 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 		this.handleDelete(path);
 		this.handleCreate(path);
 	}
-	
+
 	private boolean isArmySender(Path path) {
-		return path.getParent().getFileName().toString().toLowerCase().matches(".*@mailmil");
+		return path.getParent().getFileName().toString().toLowerCase().matches(".*@mail.mil");
 	}
-	
+
 	private boolean isProcessed(Path path) {
 		try {
 			return Files.exists(processedPath(path)) && Files.readAttributes(processedPath(path), BasicFileAttributes.class).size() > 0;
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			return false;
 		}
 	}
-	
+
 	private Path processedPath(Path path) {
 		return path.resolveSibling(FilenameUtils.getBaseName(path.getFileName().toString()).concat(".data"));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private void addProcessed(Path path) {
 		if (isProcessed(path)) {
@@ -120,7 +123,8 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 				List<TrainingScheduleEntry> data = (List<TrainingScheduleEntry>) ois.readObject();
 				TRAINING_SCHEDULES.put(processedPath(path), data);
 				FAILED.remove(path);
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				if (!FAILED.contains(path)) {
 					logger.error("Failed to read processed file: " + path, e);
 					FAILED.add(path);
@@ -132,7 +136,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 			}
 		}
 	}
-	
+
 	private void processWordFile(Path path) {
 		try {
 			XWPFDocument doc = new XWPFDocument(Files.newInputStream(path));
@@ -146,9 +150,12 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 					List<String> list = new ArrayList<>();
 					list.addAll(Arrays.asList(line.split("\t")));
 					data.add(list);
-				} catch (ParseException pe) { }
-				if (line.startsWith("\t"))
+				}
+				catch (ParseException pe) {
+				}
+				if (line.startsWith("\t")) {
 					data.get(data.size() - 1).addAll(Arrays.asList(line.substring(1).split("\t")));
+				}
 			});
 			List<TrainingScheduleEntry> entries = new ArrayList<>();
 			for (List<String> event : data) {
@@ -168,7 +175,7 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 				entry.setLocation(event.get(event.size() - 2));
 				entries.add(entry);
 			}
-			
+
 			if (!entries.isEmpty()) {
 				Collections.sort(entries);
 
@@ -191,16 +198,17 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 					PushUtils.getService().push(device, payload);
 				});
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			logger.error("Failed to process training schedule file: " + path, e);
 			FAILED.add(path);
 		}
 	}
-	
+
 	private void processPDF(Path path) {
 		logger.error("PDF processing not implemented yet");
 	}
-	
+
 	public static Map<Path, List<TrainingScheduleEntry>> getTrainingSchedules() {
 		return TRAINING_SCHEDULES;
 	}
