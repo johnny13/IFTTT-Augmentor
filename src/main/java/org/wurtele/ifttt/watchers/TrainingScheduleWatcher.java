@@ -144,14 +144,14 @@ public class TrainingScheduleWatcher extends SimpleDirectoryWatcher {
 			List<List<String>> data = new ArrayList<>();
 			DateFormat df1 = new SimpleDateFormat("MMM dd, yyyy");
 			DateFormat df2 = new SimpleDateFormat("MMM dd, yyyy HH:mm");
-			Arrays.asList(extractor.getText().split("\n")).stream().forEach((line) -> {
+			Arrays.asList(extractor.getText().split("\n")).stream().forEach(line -> {
 				try {
 					df1.parse(line.split("\t")[0]);
 					List<String> list = new ArrayList<>();
 					list.addAll(Arrays.asList(line.split("\t")));
 					data.add(list);
 				}
-				catch (ParseException pe) {
+				catch (ParseException | ArrayIndexOutOfBoundsException e) {
 				}
 				if (line.startsWith("\t")) {
 					data.get(data.size() - 1).addAll(Arrays.asList(line.substring(1).split("\t")));
